@@ -7,6 +7,7 @@ import ToDoList from './components/ToDoList';
 import { useState } from 'react';
 import ToDoInsert from './components/ToDoInsert';
 import { useRef } from 'react';
+import { useEffect } from 'react';
 
 const GlobalStyle = createGlobalStyle`
   *{margin: 0;padding: 0;}
@@ -50,9 +51,15 @@ const initialData = [
 	{ id: 2, title: '방청소 - 물걸레질 포함', done: false },
 	{ id: 3, title: '포트폴리오 계획서 작성', done: true },
 ];
+// localStorage.removeItem('todo-list');
+const defaultData = JSON.parse(localStorage['todo-list'] || JSON.stringify(initialData));
 const App = () => {
-	const [todos, setTodos] = useState(initialData);
+	const [todos, setTodos] = useState(defaultData);
 	const nextId = useRef(4);
+
+	useEffect(() => {
+		localStorage['todo-list'] = JSON.stringify(todos);
+	}, [todos]);
 
 	//추가함수
 	const fnAdd = (plan) => {
@@ -68,7 +75,7 @@ const App = () => {
 			];
 		});
 		nextId.current++;
-		console.log(nextId.current);
+		// console.log(nextId.current);
 	};
 
 	//삭제함수
